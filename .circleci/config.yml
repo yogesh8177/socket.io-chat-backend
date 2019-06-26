@@ -26,11 +26,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: npm install
-
       - run: 
           name: Running chat app
-          command: npm start
+          command: npm install && npm start
           background: true
 
       - save_cache:
@@ -39,4 +37,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test
+      #- run: npm test
