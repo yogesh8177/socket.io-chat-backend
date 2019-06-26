@@ -1,0 +1,26 @@
+{
+  "name": "socket.io-chat-backend",
+  "version": "1.0.0",
+  "description": "Backend for chat app",
+  "main": "./app/src/index.js",
+  "scripts": {
+    "start": "node ./app/src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yogesh8177/socket.io-chat-backend.git"
+  },
+  "keywords": [
+    "socket.io"
+  ],
+  "author": "Yogesh R. Jadhav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yogesh8177/socket.io-chat-backend/issues"
+  },
+  "homepage": "https://github.com/yogesh8177/socket.io-chat-backend#readme",
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  }
+}
