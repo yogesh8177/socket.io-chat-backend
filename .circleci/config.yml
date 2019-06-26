@@ -33,6 +33,7 @@ jobs:
       - run: 
           name: Running chat app
           command: npm start
+          background: true
 
       - save_cache:
           paths:
