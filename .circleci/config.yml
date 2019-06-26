@@ -27,9 +27,12 @@ jobs:
             - v1-dependencies-
 
       - run: 
+          name: Install node dependencies
+          command: npm install
+
+      - run: 
           name: Running chat app
-          command: npm install && npm start
-          background: true
+          command: npm start
 
       - save_cache:
           paths:
