@@ -1,9 +1,20 @@
 version: "3.5"
 
 services:
+  auth_service:
+    image: node:10.16.0
+    volumes: 
+      - ./authService:/authService
+    working_dir: /authService
+    command: npm start
+    ports: 
+      - "3001:3001"
+      
   chat_backend:
     image: node:10.16.0
     volumes: 
       - ./:/chatBackend
     working_dir: /chatBackend
     command: npm start
+    ports:
+      - "3000:3000"
