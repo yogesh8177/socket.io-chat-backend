@@ -30,6 +30,11 @@ jobs:
           name: Install node dependencies
           command: npm install
 
+      - run:
+          name: Run Auth Service
+          command: cd ./authService && npm install && npm start
+          background: true
+
       - run: 
           name: Running chat app
           command: npm start
