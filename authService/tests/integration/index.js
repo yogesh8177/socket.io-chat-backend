@@ -12,8 +12,9 @@ before(function(done) {
 
 describe(`Auth api tests`, () => {
 
-    it(`Should fetch 2 seeded users`, done => {
+    it(`Should fetch 2 seeded users`, function (done) {
         let limit = 2, page = 0;
+        this.timeout(10000);
         return Promise.delay(2000)
             .then(() => request(app)
                 .get('/fetch-users')
@@ -28,7 +29,7 @@ describe(`Auth api tests`, () => {
             .catch(error => Promise.reject(error))   
     });
 
-    it(`Should signup a new user`, done => {
+    it(`Should signup a new user`, function (done) {
         let user = {
             id: 3,
             name: 'Rambo',
@@ -47,8 +48,9 @@ describe(`Auth api tests`, () => {
         .catch(error => done(error));
     });
 
-    it(`Should fetch 2 seeded users plus 1 user that we registered in above test`, done => {
+    it(`Should fetch 2 seeded users plus 1 user that we registered in above test`, function(done) {
         let limit = 3, page = 0;
+        this.timeout(10000);
         return Promise.delay(2000)
             .then(() => request(app)
                 .get('/fetch-users')
