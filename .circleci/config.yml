@@ -113,6 +113,8 @@ jobs:
       - run:
           name: Run Auth Service Tests
           command: cd ./authService && npm test
+          environment:
+            NODE_ENV: dev
 
 workflows:
   version: 2
