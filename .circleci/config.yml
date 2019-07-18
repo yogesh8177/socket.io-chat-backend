@@ -81,8 +81,7 @@ jobs:
           MYSQL_USER: yogesh
           MYSQL_PASSWORD: password
           MYSQL_ROOT_PASSWORD: password
-        
-      
+          
     working_directory: ~/repo
 
     steps:
@@ -103,6 +102,15 @@ jobs:
       - run:
           name: Run Auth Service Tests
           command: cd ./authService && npm test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test_auth_service:
+          requires:
+            - build
           
 
 
