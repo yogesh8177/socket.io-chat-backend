@@ -15,7 +15,7 @@ describe(`Auth api tests`, () => {
     it(`Should fetch 2 seeded users`, function (done) {
         let limit = 2, page = 0;
         this.timeout(10000);
-        return Promise.delay(2000)
+            Promise.delay(2000)
             .then(() => request(app)
                 .get('/fetch-users')
                 .query({limit, page})
@@ -51,7 +51,7 @@ describe(`Auth api tests`, () => {
     it(`Should fetch 2 seeded users plus 1 user that we registered in above test`, function(done) {
         let limit = 3, page = 0;
         this.timeout(10000);
-        return Promise.delay(2000)
+            Promise.delay(2000)
             .then(() => request(app)
                 .get('/fetch-users')
                 .query({limit, page})
