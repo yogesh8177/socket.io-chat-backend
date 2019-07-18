@@ -28,9 +28,28 @@ app.post('/sign-up', async (req, res) => {
     }
 });
 
+app.get('/fetch-users', async (req, res) => {
+    try{
+        let { limit, page } = req.query;
+        let user = new Users();
+        let usersList = await user.fetchUsers(limit, page);
+
+        return res.status(200).send({status: 'success', usersList});
+    }
+    catch(error) {
+        return res.status(500).send({message: 'Internal Server Error', error});
+    }
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 (async() => {
-    await migrate();
-})().catch(error => console.error(error));
+    if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development')
+        await migrate();
+    else
+        console.log('skipping seeding of data...');
+})()
+.catch(error => console.error(error));
+
+exports.app = app;
 

@@ -62,3 +62,4 @@ typings/
 
 # Mysql db
 data
+authService/.env

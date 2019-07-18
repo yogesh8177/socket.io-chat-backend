@@ -1,7 +1,7 @@
 const Promise = require('bluebird');
 let Database = require('../db/mySQLDatabase').Database;
 let models = [];
-models.push(require('../models/users').Users.getModelInstance());
+models.push(require('../migrations/userMigration').UserMigration.getModelInstance());
 
 async function migrate () {
     let db = Database.create();
