@@ -4,11 +4,12 @@ const request = require('supertest');
 
 const expect = chai.expect;
 
+before(done => {
+    app.on('migration-complete', () => done());
+    this.timeout(10000);
+});
+
 describe(`Auth api tests`, () => {
-    
-    beforeEach(done => {
-        app.on('migration-complete', () => done());
-    });
 
     it(`Should fetch 2 seeded users`, done => {
         let limit = 2, page = 0;
