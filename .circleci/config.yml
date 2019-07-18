@@ -73,7 +73,7 @@ jobs:
           MYSQL_PASSWORD: password
           MYSQL_ROOT_PASSWORD: password
           MYSQL_PORT: "3306"
-          NODE_ENV: dev
+          NODE_ENV: test
 
       - image: mysql:8.0.16
         environment:
@@ -113,8 +113,6 @@ jobs:
       - run:
           name: Run Auth Service Tests
           command: cd ./authService && npm test
-          environment:
-            NODE_ENV: dev
 
 workflows:
   version: 2

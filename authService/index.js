@@ -44,7 +44,9 @@ app.get('/fetch-users', async (req, res) => {
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 (async() => {
-    if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development')
+    if (process.env.NODE_ENV === 'dev' 
+        || process.env.NODE_ENV === 'development'
+        || process.env.NODE_ENV === 'test')
         await migrate();
     else
         console.log('skipping seeding of data...');
