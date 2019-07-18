@@ -26,7 +26,7 @@ describe(`Auth api tests`, () => {
                 expect(response.body.usersList).to.have.length(limit);
                 done();
             })
-            .catch(error => Promise.reject(error))   
+            .catch(error => done(error));   
     });
 
     it(`Should signup a new user`, function (done) {
@@ -62,6 +62,6 @@ describe(`Auth api tests`, () => {
                 expect(response.body.usersList).to.have.length(limit);
                 done();
             })
-            .catch(error => Promise.reject(error))   
+            .catch(error => done(error));   
     });
 });
