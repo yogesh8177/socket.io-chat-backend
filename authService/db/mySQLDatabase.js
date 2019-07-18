@@ -1,14 +1,15 @@
 let mysql = require('mysql');
 
 class Database {
-    #connection;
 
     constructor(){
-        this.#connection = mysql.createConnection({
-            host     : process.env.DB_HOST,
-            user     : process.env.DB_USER,
-            password : process.env.DB_PASSWORD
+        this.connection = mysql.createConnection({
+            host     : process.env.MYSQL_HOST,
+            database : process.env.MYSQL_DATABASE,
+            user     : process.env.MYSQL_USER,
+            password : process.env.MYSQL_PASSWORD
         });
+        console.log(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD)
     }
     // static function to get connection object
     static create() {
@@ -19,17 +20,19 @@ class Database {
     }
 
     async query(query, params) {
+        //return Promise.resolve('yes');
         return Promise.resolve()
                 .then(() => {
-                    this.#connection.beginTransaction(err => {
-                        if (err) return Promise.reject(error);
-                        this.#connection.query(query, params, (err, result) => {
-                            if (err) {
-                                console.error('error in transaction', JSON.stringify(err, null, 2));
-                                this.#connection.rollback();
-                                return Promise.reject(err);
-                            }
-                            return Promise.resolve(result);
+                    return new Promise((resolve, reject) => {
+                        this.connection.beginTransaction(err => {
+                            if (err) return reject(err);
+                            this.connection.query(query, params, (err, result) => {
+                                if (err) {
+                                    this.connection.rollback();
+                                    return reject(err);
+                                }
+                                return resolve(result);
+                            });
                         });
                     });
                 })
@@ -42,10 +45,9 @@ class Database {
     async complete() {
         return Promise.resolve()
                 .then(() => {
-                    this.#connection.commit(err => {
+                    this.connection.commit(err => {
                         if (err) return Promise.reject(err);
-
-                        this.#connection.release();
+                        //this.connection.close();
                         return Promise.resolve();
                     });
                 })
@@ -55,4 +57,4 @@ class Database {
     }
 }
 
-export default Database;
+exports.Database = Database;

@@ -1,66 +1,87 @@
 const bcrypt = require('bcrypt');
-import { Database } from './db/mySQLDatabase';
+let Database = require('../db/mySQLDatabase').Database;
 const saltRounds = 12;
 
 class Users {
     constructor() {}
 
+    static getModelInstance() {
+        if (!this.modelInstance) {
+            this.modelInstance = new Users();
+            return this.modelInstance;
+        }
+        else {
+            return this.modelInstance;
+        }
+    }
+
     async signUp(user) {
+        let db = new Database();
         return Promise.resolve()
                 .then(() => {
-                    bcrypt.hash(user.password, saltRounds, (err, hash) => {
-                        if (err) {
-                            console.error('error while hashing password', JSON.stringify(err));
-                            return Promise.reject(err);
-                        }
-                        user.password = hash;
-                        return Promise.resolve(user);
+                    return new Promise((resolve, reject) => {
+                        bcrypt.hash(user.password, saltRounds, (err, hash) => {
+                            if (err) {
+                                console.error('error while hashing password', JSON.stringify(err));
+                                return reject(err);
+                            }
+                            user.password = hash;
+                            return resolve(user);
+                        });
                     });
                 })
-                .then(user => {
-                    let db = new Database();
-                    let result = await db.query('INSERT INTO users SET ?', user);
-                })
+                .then(user => db.query('INSERT INTO users SET ?', user))
+                .then(result => db.complete())
                 .catch(error => {
-                    console.error('error while sign up', JSON.stringify(error, null, 2));
-                    Promise.reject(error);
+                    console.error('error while sign up', error);
+                    return Promise.reject(error);
                 });
     }
 
     async migrateUp (db) {
         // we can use a config file to update the schema and build the table based on it
         // but for now, hardcoded fields will do the job.
+        console.log('creating table users');
         return db.query(`CREATE TABLE IF NOT EXISTS users (
-                        user_id INT NOT NULL, 
-                        PRIMARY KEY user_id (user_id), 
-                        name VARCHAR(255),
-                        email VARCHAR(255),
-                        accountVerified BOOL,
+                        id INT NOT NULL, 
+                        PRIMARY KEY id (id), 
+                        name VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) UNIQUE NOT NULL,
+                        mobileNumber VARCHAR(50) UNIQUE,
+                        password VARCHAR(300) NOT NULL,
+                        accountVerified BOOL DEFAULT false,
                         access_token TEXT,
                         refresh_token TEXT,
-                        createdAt DATE,
-                        updatedAt DATE
+                        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                     )`,
                     []
                 );
     }
 
     async migrateDown (db) {
-        return db.query(`DROP TABLE IF EXISTS users`, []);
-    }
-
-    async migration () {
-        try {
-            let db = new Database();
-            let resultForDown = await this.migrateDown(db);
-            let resultForUp = await this.migrateUp(db);
-            return Promise.resolve();
+        try{ 
+            console.log('dropping table users');
+            let result = await db.query(`DROP TABLE IF EXISTS users`, []);
+            console.log('Users migrate down result', result);
+            return Promise.resolve(result);
         }
         catch(error) {
-            console.error('Error while migration', JSON.stringify(error, null, 2));
+            console.error('Error while migrating Users table', JSON.stringify(error, null, 2));
+        }   
+    }
+
+    async migration (db) {
+        try {
+            let resultForDown = await this.migrateDown(db);
+            let resultForUp = await this.migrateUp(db);
+            return Promise.resolve({resultForDown, resultForUp});
+        }
+        catch(error) {
+            console.error('Error while migration in Users model', JSON.stringify(error, null, 2));
             return Promise.reject(error);
         }
     }
 }
 
-export default Users;
+exports.Users = Users;
