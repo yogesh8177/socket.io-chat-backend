@@ -9,7 +9,7 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:10.16.0
         environment:
-          MYSQL_HOST: mysql
+          MYSQL_HOST: localhost
           MYSQL_DATABASE: chatDB
           MYSQL_USER: yogesh
           MYSQL_PASSWORD: password
@@ -67,7 +67,7 @@ jobs:
     docker:
       - image: circleci/node:10.16.0
         environment:
-          MYSQL_HOST: mysql
+          MYSQL_HOST: localhost
           MYSQL_DATABASE: chatDB
           MYSQL_USER: yogesh
           MYSQL_PASSWORD: password
