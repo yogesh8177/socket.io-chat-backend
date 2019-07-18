@@ -81,6 +81,7 @@ jobs:
           MYSQL_USER: yogesh
           MYSQL_PASSWORD: password
           MYSQL_ROOT_PASSWORD: password
+        command: --default-authentication-plugin=mysql_native_password
           
     working_directory: ~/repo
 
