@@ -4,7 +4,7 @@ const request = require('supertest');
 
 const expect = chai.expect;
 
-before(done => {
+before(function(done) {
     app.on('migration-complete', () => done());
     this.timeout(10000);
 });
