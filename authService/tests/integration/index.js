@@ -30,8 +30,8 @@ describe(`Auth api tests`, () => {
         .catch(error => done(error));
     });
 
-    it(`Should fetch 2 seeded users`, done => {
-        let limit = 2, page = 0;
+    it(`Should fetch 2 seeded users plus 1 user that we registered in above test`, done => {
+        let limit = 3, page = 0;
         request(app)
         .get('/fetch-users')
         .query({limit, page})
