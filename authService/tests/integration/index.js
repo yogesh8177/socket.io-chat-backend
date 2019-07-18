@@ -1,6 +1,7 @@
 const app = require('../../index').app;
 const chai = require('chai');
 const request = require('supertest');
+const Promise = require('bluebird');
 
 const expect = chai.expect;
 
@@ -10,6 +11,22 @@ before(function(done) {
 });
 
 describe(`Auth api tests`, () => {
+
+    it(`Should fetch 2 seeded users`, done => {
+        let limit = 2, page = 0;
+        return Promise.delay(2000)
+            .then(() => request(app)
+                .get('/fetch-users')
+                .query({limit, page})
+            )
+            .then(response => {
+                expect(response.statusCode).to.equal(200);
+                expect(response.body.usersList).to.be.an('array');
+                expect(response.body.usersList).to.have.length(limit);
+                done();
+            })
+            .catch(error => Promise.reject(error))   
+    });
 
     it(`Should signup a new user`, done => {
         let user = {
@@ -32,15 +49,17 @@ describe(`Auth api tests`, () => {
 
     it(`Should fetch 2 seeded users plus 1 user that we registered in above test`, done => {
         let limit = 3, page = 0;
-        request(app)
-        .get('/fetch-users')
-        .query({limit, page})
-        .then(response => {
-            expect(response.statusCode).to.equal(200);
-            expect(response.body.usersList).to.be.an('array');
-            expect(response.body.usersList).to.have.length(limit);
-            done();
-        })
-        .catch(error => done(error));
+        return Promise.delay(2000)
+            .then(() => request(app)
+                .get('/fetch-users')
+                .query({limit, page})
+            )
+            .then(response => {
+                expect(response.statusCode).to.equal(200);
+                expect(response.body.usersList).to.be.an('array');
+                expect(response.body.usersList).to.have.length(limit);
+                done();
+            })
+            .catch(error => Promise.reject(error))   
     });
 });
