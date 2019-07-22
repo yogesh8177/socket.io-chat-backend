@@ -51,7 +51,7 @@ class UserMigration {
 
     async seedUsers (db) {
         let user = new Users();
-        Promise.mapSeries(
+        return Promise.mapSeries(
             jsonData,
             userPayload => {
                 return user.signUp(userPayload);
