@@ -22,3 +22,9 @@ This is a hobby project to demonstrate realtime we app development using websock
 #### Relational vs Non relational
 
 As the scale and requirements for this proof of concept can be easily satisfied by a relational database, I am going forward and using  `MYSQL 8.x.x`. Will update this readme if there is any change of plans.
+
+## Architecture diagram
+
+<img src="./documentation/Architecture-Diagrams/Architecture-Diagram-v1.jpg">
+
+[Architecture-Diagram](./documentation/Architecture-Diagrams/Architecture-Diagram-v1.jpg)
