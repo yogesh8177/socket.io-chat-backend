@@ -8,6 +8,21 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.16.0
+        environment:
+          MYSQL_HOST: localhost
+          MYSQL_DATABASE: chatDB
+          MYSQL_USER: yogesh
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_PORT: "3306"
+          NODE_ENV: dev
+
+      - image: mysql:8.0.16
+        environment:
+          MYSQL_DATABASE: chatDB
+          MYSQL_USER: yogesh
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -30,6 +45,11 @@ jobs:
           name: Install node dependencies
           command: npm install
 
+      - run:
+          name: Run Auth Service
+          command: cd ./authService && npm install && npm start
+          background: true
+
       - run: 
           name: Running chat app
           command: npm start
@@ -42,3 +62,67 @@ jobs:
 
       # run tests!
       #- run: npm test
+
+  test_auth_service:
+    docker:
+      - image: circleci/node:10.16.0
+        environment:
+          MYSQL_HOST: localhost
+          MYSQL_DATABASE: chatDB
+          MYSQL_USER: yogesh
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_PORT: "3306"
+          NODE_ENV: test
+
+      - image: mysql:8.0.16
+        environment:
+          MYSQL_DATABASE: chatDB
+          MYSQL_USER: yogesh
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+        command: --default-authentication-plugin=mysql_native_password
+          
+    working_directory: ~/repo
+
+    steps:
+
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: 
+          name: Install node dependencies
+          command: cd ./authService && npm install
+      
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.5.0
+
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+
+      - run:
+          name: Run Auth Service Tests
+          command: cd ./authService && npm test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test_auth_service:
+          requires:
+            - build
+          
+
+
+      

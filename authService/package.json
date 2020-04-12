@@ -1,0 +1,28 @@
+{
+  "name": "authservice",
+  "version": "1.0.0",
+  "description": "Auth service for chat application",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha tests/**/*.js --exit"
+  },
+  "keywords": [
+    "auth"
+  ],
+  "author": "Yogesh R. Jadhav",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "3.0.6",
+    "bluebird": "3.5.5",
+    "express": "4.17.1",
+    "googleapis": "40.0.1",
+    "mysql": "2.17.1"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "mocha": "6.1.4",
+    "nodemon": "1.19.1",
+    "supertest": "4.0.2"
+  }
+}

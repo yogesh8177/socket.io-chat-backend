@@ -21,6 +21,11 @@
   },
   "homepage": "https://github.com/yogesh8177/socket.io-chat-backend#readme",
   "dependencies": {
-    "socket.io": "^2.2.0"
+    "bluebird": "3.5.5",
+    "body-parser": "1.19.0",
+    "socket.io": "2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.19.1"
   }
 }
